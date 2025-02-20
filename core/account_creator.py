@@ -4,8 +4,20 @@ import json
 def create_instagram_account():
     # Generate temp email
     temp_mail_api = "https://www.1secmail.com/api/v1/?action=genRandomMailbox"
-    email_response = requests.get(temp_mail_api).json()
-    email = email_response["email"]
+    try:
+        response = requests.get(temp_mail_api)
+        if response.status_code == 200:
+            email_data = response.json()
+            if email_data:
+                return email_data[0]  # First generated email
+            else:
+                raise ValueError("Empty email response received.")
+        else:
+            raise Exception(f"API Error: {response.status_code} - {response.text}")
+
+    except Exception as e:
+        print("Error fetching temp mail:", e)
+        return None
     
     # Create Instagram Account
     insta_signup_url = "https://www.instagram.com/accounts/web_create_ajax/"
