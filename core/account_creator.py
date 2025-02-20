@@ -3,7 +3,7 @@ import json
 
 def create_instagram_account():
     # Generate temp email
-    temp_mail_api = "https://www.1secmail.com/api/v1/?action=genRandomMailbox"
+    temp_mail_api = "https://www.1secmail.org/api/v1/?action=genRandomMailbox"
     try:
         response = requests.get(temp_mail_api)
         if response.status_code == 200:
