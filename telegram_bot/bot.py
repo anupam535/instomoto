@@ -1,5 +1,10 @@
 import telebot
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'core')))
 import account_creator
+
 
 bot = telebot.TeleBot("YOUR_TELEGRAM_BOT_TOKEN")
 
