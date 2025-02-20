@@ -1,37 +1,33 @@
 import telebot
-import sys
-import os
-
-# Parent directory add karo
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'core')))
-
-import account_creator  # Ab module import hoga
-
 import account_creator
-import auto_liker
-import auto_commenter
 
-from config import TELEGRAM_BOT_TOKEN
+bot = telebot.TeleBot("YOUR_TELEGRAM_BOT_TOKEN")
 
-bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
-
-@bot.message_handler(commands=['start'])
-def welcome_message(message):
-    bot.reply_to(message, "👋 Welcome! Use /help to see available commands.")
+user_data = {}
 
 @bot.message_handler(commands=['create_account'])
-def create_account(message):
-    result = account_creator.create_instagram_account()
-    bot.reply_to(message, result)
+def ask_email(message):
+    bot.reply_to(message, "✉️ Enter the email address for the Instagram account:")
+    bot.register_next_step_handler(message, process_email)
 
-@bot.message_handler(commands=['auto_like'])
-def auto_like(message):
-    result = auto_liker.auto_like("https://www.instagram.com/p/example_post", None)
-    bot.reply_to(message, result)
+def process_email(message):
+    user_data[message.chat.id] = {"email": message.text}
+    bot.reply_to(message, "📩 Enter the OTP received on email:")
+    bot.register_next_step_handler(message, process_otp)
 
-@bot.message_handler(commands=['auto_comment'])
-def auto_comment(message):
-    result = auto_commenter.auto_comment("https://www.instagram.com/p/example_post", None)
-    bot.reply_to(message, result)
+def process_otp(message):
+    user_data[message.chat.id]["otp"] = message.text
+    email = user_data[message.chat.id]["email"]
+    otp = user_data[message.chat.id]["otp"]
+    
+    bot.reply_to(message, "⏳ Creating account... Please wait!")
+    
+    # Call account creator function
+    result = account_creator.create_instagram_account(email, otp)
+    
+    if result:
+        bot.reply_to(message, f"✅ Account Created Successfully!\nUsername: {result}")
+    else:
+        bot.reply_to(message, "❌ Account creation failed. Try again.")
 
 bot.polling()
