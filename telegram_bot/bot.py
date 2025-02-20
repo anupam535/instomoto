@@ -1,7 +1,12 @@
 import telebot
 import sys
 import os
+
+# Parent directory add karo
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'core')))
+
+import account_creator  # Ab module import hoga
+
 import account_creator
 import auto_liker
 import auto_commenter
