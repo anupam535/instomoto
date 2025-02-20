@@ -6,7 +6,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'c
 import account_creator
 
 
-bot = telebot.TeleBot("YOUR_TELEGRAM_BOT_TOKEN")
+bot = telebot.TeleBot("7604424348:AAHtkmD0YKApTg4B9-QeJNW5SXUmOmctK7E")
 
 user_data = {}
 
